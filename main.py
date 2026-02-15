@@ -13,7 +13,7 @@ import argparse
 import logging
 import sys
 
-from src.analyzer import MacroEconomicAnalyzer
+from src.analyzer import Analyzer
 
 logging.basicConfig(
     level=logging.CRITICAL,
@@ -88,7 +88,7 @@ def main(args: list[str] | None = None) -> int:
         logger.debug("Debug logging enabled")
 
     try:
-        analyzer = MacroEconomicAnalyzer()
+        analyzer = Analyzer()
 
         # Отдельный режим для --list-reports
         if parsed_args.list_reports:

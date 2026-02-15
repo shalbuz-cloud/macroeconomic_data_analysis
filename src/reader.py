@@ -20,7 +20,7 @@ class DataReader(ABC):
         pass
 
 
-class CSVEconomicReader(DataReader):
+class CSVReader(DataReader):
     """Читатель CSV файлов с экономическими данными."""
 
     def __init__(

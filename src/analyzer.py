@@ -1,13 +1,13 @@
 import logging
 
 from src.calculator import GDPCalculator, StatisticsCalculator
-from src.reader import CSVEconomicReader
+from src.reader import CSVReader
 from src.reports.base import ReportFactory
 
 logger = logging.getLogger(__name__)
 
 
-class MacroEconomicAnalyzer:
+class Analyzer:
     """
     Фасад для анализа макроэкономических данных.
 
@@ -15,14 +15,14 @@ class MacroEconomicAnalyzer:
     за простым интерфейсом.
 
     Пример использования:
-        >>> analyzer = MacroEconomicAnalyzer()
+        >>> analyzer = Analyzer()
         >>> result = analyzer.analyze(["data.csv"], "average-gdp")
         >>> print(result)
     """
 
     def __init__(
         self,
-        reader: CSVEconomicReader | None = None,
+        reader: CSVReader | None = None,
         calculator: StatisticsCalculator | None = None,
     ):
         """
@@ -32,11 +32,9 @@ class MacroEconomicAnalyzer:
             reader: Читатель CSV файлов (создается по умолчанию).
             calculator: Калькулятор статистик (создается по умолчанию).
         """
-        self.reader = reader or CSVEconomicReader()
+        self.reader = reader or CSVReader()
         self.calculator = calculator or GDPCalculator()
-        logger.debug(
-            f"Initialized MacroEconomicAnalyzer with {type(self.calculator).__name__}"
-        )
+        logger.debug(f"Initialized Analyzer with {type(self.calculator).__name__}")
 
     def analyze(self, file_paths: list[str], report_type: str) -> str:
         """
@@ -113,5 +111,5 @@ def analyze_economic_data(
     Returns:
         str: Результат анализа.
     """
-    analyzer = MacroEconomicAnalyzer()
+    analyzer = Analyzer()
     return analyzer.analyze(file_paths, report_type)
