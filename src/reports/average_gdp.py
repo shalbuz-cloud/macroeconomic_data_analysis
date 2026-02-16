@@ -49,7 +49,7 @@ class AverageGDPReport(Report):
                     idx,
                     stats.country,
                     f"{stats.average_gdp:,.2f}",  # Формат с разделителями тысяч
-                    stats.year_count,
+                    stats.years_count,
                 ]
             )
 

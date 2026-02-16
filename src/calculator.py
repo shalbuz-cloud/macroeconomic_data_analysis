@@ -62,7 +62,7 @@ class GDPCalculator(StatisticsCalculator):
                 CountryStatistics(
                     country=country,
                     average_gdp=avg_gdp,
-                    year_count=int(data["count"]),
+                    years_count=int(data["count"]),
                 )
             )
             logger.debug(
