@@ -29,8 +29,10 @@ type-check:
 	poetry run mypy .
 
 # Run tests
+# tests/ default value
+target ?= tests/
 test:
-	poetry run pytest tests/
+	poetry run pytest $(target)
 
 # Run tests with coverage
 test-cov:
