@@ -28,8 +28,7 @@ class CSVReader(DataReader):
         validator: EconomicDataValidator | None = None,
         converter: EconomicDataConverter | None = None,
     ):
-        """
-        Инициализация читателя.
+        """Инициализация читателя.
 
         Args:
             validator: Валидатор данных (создается по умолчанию).
@@ -39,8 +38,7 @@ class CSVReader(DataReader):
         self.converter = converter or EconomicDataConverter()
 
     def read_file(self, file_path: str) -> Generator[EconomicRecord, None, None]:
-        """
-        Читает один CSV файл и возвращает генератор записей.
+        """Читает один CSV файл и возвращает генератор записей.
 
         Args:
             file_path: Путь к CSV файлу.
@@ -95,15 +93,21 @@ class CSVReader(DataReader):
                     raise
 
     def read(self, file_paths: list[str]) -> list[EconomicRecord]:
-        """
-        Читает все CSV файлы и объединяет результаты.
+        """Читает все CSV файлы и объединяет результаты.
 
         Args:
             file_paths: Список путей к CSV файлам.
 
         Returns:
             list[EconomicRecord]: Список всех записей из всех файлов.
+
+        Raises:
+            ValueError: Если список файлов пуст.
+            FileNotFoundError: Если один из файлов не существует.
         """
+        if not file_paths:
+            raise ValueError("No files provided for reading")
+
         all_records = []
 
         for file_path in file_paths:
