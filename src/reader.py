@@ -79,7 +79,13 @@ class CSVReader(DataReader):
             for row_num, row in enumerate(reader, start=2):
                 try:
                     # Очищаем пробелы в ключах и значениях
-                    clean_row = {k.strip().lower(): v.strip() for k, v in row.items()}
+                    # Защита от None значений
+                    clean_row = {}
+                    for k, v in row.items():
+                        clean_k = k.strip().lower() if k else ""
+                        clean_v = v.strip() if v is not None else ""
+                        clean_row[clean_k] = clean_v
+                        clean_row[clean_k] = clean_v
 
                     self.validator.validate_row(clean_row, row_num)
                     yield self.converter.to_record(clean_row)
