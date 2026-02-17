@@ -1,5 +1,5 @@
 import logging
-from typing import Sequence, Any
+from typing import Any, Sequence
 
 logger = logging.getLogger(__name__)
 
@@ -108,22 +108,32 @@ class EconomicDataValidator:
 
             return True
 
-        except ValidationError as e:
+        except ValidationError:
             # Пробрасываем ValidationError дальше без изменений
             raise
         except Exception as e:
-            raise ValidationError(f"Row {row_num}: Unexcepted validation error - {e}") from e
+            raise ValidationError(
+                f"Row {row_num}: Unexcepted validation error - {e}"
+            ) from e
 
-    def _validate_required_fields_present(self, row: dict[str, Any], row_num: int) -> None:
+    def _validate_required_fields_present(
+        self, row: dict[str, Any], row_num: int
+    ) -> None:
         """Проверяет наличие всех обязательных полей и что они не пусты."""
         for col in self.REQUIRED_COLUMNS:
             value = row.get(col)
             if value is None or (isinstance(value, str) and not value.strip()):
-                raise ValueError(f"Row {row_num}: Missing or empty value for column '{col}'")
+                raise ValueError(
+                    f"Row {row_num}: Missing or empty value for column '{col}'"
+                )
 
     @staticmethod
     def _validate_integer_field(
-            value: int | str | float, field_name: str, row_num: int, min_value: int = None, max_value: int = None
+        value: int | str | float | None,
+        field_name: str,
+        row_num: int,
+        min_value: int | None = None,
+        max_value: int | None = None,
     ) -> int:
         """Валидирует целочисленное поле.
 
@@ -139,15 +149,18 @@ class EconomicDataValidator:
         Raises:
             ValidationError: При ошибке валидации.
         """
+        if value is None:
+            return 0
+
         if isinstance(value, int):
             result = value
         else:
             try:
                 result = int(value)
-            except (ValueError, TypeError):
+            except (ValueError, TypeError) as e:
                 raise ValidationError(
                     f"Row {row_num}: Invalid {field_name} format - expected integer, got '{value}'"
-                )
+                ) from e
 
         if min_value is not None and result < min_value:
             raise ValidationError(
@@ -163,7 +176,7 @@ class EconomicDataValidator:
 
     @staticmethod
     def _validate_float_field(
-            value: Any, field_name: str, row_num: int, can_be_negative: bool = True
+        value: Any, field_name: str, row_num: int, can_be_negative: bool = True
     ) -> float:
         """Валидирует поле с плавающей точкой.
 
@@ -185,10 +198,10 @@ class EconomicDataValidator:
         else:
             try:
                 result = float(value)
-            except (ValueError, TypeError):
+            except (ValueError, TypeError) as e:
                 raise ValidationError(
                     f"Row {row_num}: Invalid {field_name} format - expected number, got '{value}'"
-                )
+                ) from e
 
         if not can_be_negative and result < 0:
             raise ValidationError(
@@ -196,5 +209,3 @@ class EconomicDataValidator:
             )
 
         return result
-
-
