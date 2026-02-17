@@ -131,12 +131,12 @@ macroeconomic-analyzer/
 
 ## 🔄 Процесс добавления нового отчета:
 
-#### 1. Создайте класс отчета в новом файле `core/reports/`:
+#### 1. Создайте класс отчета в новом файле `src/reports/`:
 
-Например `core/reports/population.py`:
+Например `src/reports/population.py`:
 ```python
-from core.reports.base import Report
-from core.models import CountryStatistics
+from src.reports.base import Report
+from src.models import CountryStatistics
 
 class PopulationReport(Report):
     @property
@@ -148,19 +148,19 @@ class PopulationReport(Report):
         return "таблица"
 ```
 
-#### 2. Зарегистрируйте отчет в `core/reports/__init__.py`:
+#### 2. Зарегистрируйте отчет в `src/reports/__init__.py`:
 
 ```python
-from core.reports.base import ReportFactory
-from core.reports.average_gdp import AverageGDPReport
-from core.reports.population import PopulationReport  # ✅ новый импорт
+from src.reports.base import ReportFactory
+from src.reports.average_gdp import AverageGDPReport
+from src.reports.population import PopulationReport  # ✅ новый импорт
 
 # Регистрация
 ReportFactory.register('average-gdp', AverageGDPReport)
 ReportFactory.register('population-by-continent', PopulationReport)  # ✅ новая регистрация
 ```
 
-#### 3. Добавьте калькулятор (если нужны новые метрики) в `core/calculator.py`.
+#### 3. Добавьте калькулятор (если нужны новые метрики) в `src/calculator.py`.
 
 Готово! Новый отчет автоматически доступен через `--report population-by-continent`.
 
@@ -173,7 +173,7 @@ ReportFactory.register('population-by-continent', PopulationReport)  # ✅ но�
 poetry run pytest tests/
 
 # С покрытием
-poetry run pytest --cov=core tests/
+poetry run pytest --cov=src tests/
 
 # Конкретный тест
 poetry run pytest tests/test_calculator.py -v
@@ -197,7 +197,7 @@ poetry run ruff check .
 poetry run black .
 
 # Проверка типов (mypy)
-poetry run mypy core/
+poetry run mypy src/
 
 # Все проверки одной командой
 poetry run ruff check . && poetry run mypy core/ && poetry run pytest
