@@ -1,7 +1,8 @@
-import pytest
 import tempfile
 from pathlib import Path
 from typing import Any, Iterator
+
+import pytest
 
 from src.models import EconomicRecord
 
@@ -82,6 +83,23 @@ def sample_records_list() -> list[EconomicRecord]:
             continent="Asia",
         ),
     ]
+
+
+@pytest.fixture
+def sample_valid_record(sample_record_dict) -> dict[str, str]:
+    """Фикстура с валидной строкой данных.
+    Преобразует числа в строки для CSV-подобных данных.
+    """
+    return {
+        "country": sample_record_dict["country"],
+        "year": str(sample_record_dict["year"]),
+        "gdp": str(sample_record_dict["gdp"]),
+        "gdp_growth": str(sample_record_dict["gdp_growth"]),
+        "inflation": str(sample_record_dict["inflation"]),
+        "unemployment": str(sample_record_dict["unemployment"]),
+        "population": str(sample_record_dict["population"]),
+        "continent": sample_record_dict["continent"],
+    }
 
 
 @pytest.fixture
